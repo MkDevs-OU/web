@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     permissions:
@@ -28,10 +27,10 @@ jobs:
       run: npm ci
 
     - name: Build the Angular app
-      run: npm run build -- --configuration production --base-href "https://mkdevs-ou.github.io/web/"
+      run: npm run build -- --configuration production --base-href "/"
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist  # path from angular.json
+        publish_dir: ./dist  # this matches output path in angular.json
