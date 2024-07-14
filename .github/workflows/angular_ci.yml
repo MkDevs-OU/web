@@ -1,8 +1,8 @@
-name: MkDevs Web SPA Angular CI/CD
+name: MkDevs Web Angular SPA CI/CD
 
 on:
   push:
-    branches: [ "master" ]  # Change if your default branch is different
+    branches: [ "master" ]  # default branch
   pull_request:
     branches: [ "master" ]
 
@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Use Node.js 20.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3  # use the latest version (no need for specific version)
       with:
         node-version: '20'  # lower versions are deprecated
         cache: 'npm'
