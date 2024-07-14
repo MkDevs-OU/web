@@ -1,4 +1,4 @@
-name: Angular CI/CD
+name: MkDevs Web Angular SPA CI/CD
 
 on:
   push:
@@ -11,12 +11,15 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write  # allows the action to push to the repository
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Use Node.js 20.x
-      uses: actions/setup-node@v3.5.0
+      uses: actions/setup-node@v3
       with:
         node-version: '20'
         cache: 'npm'
@@ -31,4 +34,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/webapp
+        publish_dir: ./dist/webapp  # path from angular.json
