@@ -1,4 +1,4 @@
-name: Angular CI/CD
+name: MkDevs Web SPA Angular CI/CD
 
 on:
   push:
@@ -11,18 +11,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '20'  # lower versions are deprecated
         cache: 'npm'
 
     - name: Install dependencies
@@ -35,5 +31,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/web  # Change to your actual build folder if needed
-
+        publish_dir: ./dist/web  # Adjust if necessary
