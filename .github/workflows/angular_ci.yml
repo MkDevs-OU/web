@@ -2,7 +2,7 @@ name: Angular CI/CD
 
 on:
   push:
-    branches: [ "master" ]  # Change if your default branch is different
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Use Node.js 20.x
-      uses: actions/setup-node@v3.5.0  # Ensure using the latest version
+      uses: actions/setup-node@v3.5.0
       with:
         node-version: '20'
         cache: 'npm'
@@ -31,4 +31,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/web  # Adjust if necessary
+        publish_dir: ./dist/web
