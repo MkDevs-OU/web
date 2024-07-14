@@ -1,1 +1,110 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #2196f3, #4caf50, #ffeb3b); /* Gradient: blue, green, yellow */
+}
+
+.container {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+header h1 {
+  font-size: 4em; /* Increased title size */
+  color: black; /* Title color */
+  text-transform: uppercase; /* All caps */
+  margin-bottom: 20px; /* Space from middle text */
+}
+
+main h2 {
+  font-size: 2.5em; /* Increased size for readability */
+  color: black; /* Middle text color */
+  text-transform: uppercase; /* All caps */
+  margin: 20px 0; /* Space around the middle text */
+}
+
+.icons {
+  margin: 20px 0;
+}
+
+.icons a {
+  color: black; /* Icons color changed to black */
+  margin: 0 15px;
+  font-size: 2em; /* Increase size for better visibility */
+  text-decoration: none;
+}
+
+.icons a:hover {
+  opacity: 0.8; /* Optional: add hover effect */
+}
+
+footer {
+  margin-top: 30px; /* Increased margin to push footer text lower */
+  padding: 20px 0; /* Add some padding for spacing */
+}
+
+footer a {
+  color: black; /* Footer link color */
+  text-decoration: none; /* Remove underline */
+  font-size: 1.2em; /* Font size */
+  text-transform: uppercase; /* All caps */
+  transition: color 0.3s, text-shadow 0.3s; /* Smooth transition for hover effects */
+}
+
+footer a:hover {
+  color: black; /* Change color to match the blue in the gradient */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+  text-decoration: underline; /* Underline on hover */
+}
+
+
+.registration {
+  margin-top: 10px; /* Space between the footer and the registration code */
+}
+
+.registration a {
+  color: black; /* Link color */
+  text-decoration: none; /* Remove underline */
+  font-size: 1em; /* Font size */
+  text-transform: uppercase; /* All caps */
+  font-weight: bold; /* Make it bold */
+  transition: color 0.3s, text-shadow 0.3s; /* Smooth transition for hover effects */
+}
+
+.registration a:hover {
+  color: black; /* Change color upon hover */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+  text-decoration: underline; /* Underline on hover */
+}
+
+.links {
+  margin-top: 20px; /* Space above the links */
+}
+
+.links a {
+  color: black; /* Link color */
+  text-decoration: none; /* Remove underline */
+  margin: 0 15px; /* Space between links */
+  font-size: 1.2em; /* Font size */
+  transition: color 0.3s; /* Smooth transition for hover */
+}
+
+.links a:hover {
+  color: #2196f3; /* Hover color */
+}
