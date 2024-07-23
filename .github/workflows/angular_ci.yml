@@ -1,36 +1,36 @@
-name: MkDevs Web Angular SPA CI/CD
-
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write  # allows the action to push to the repository
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Use Node.js 20.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-        cache: 'npm'
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build the Angular app
-      run: npm run build -- --configuration production --base-href "/"
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist  # this matches output path in angular.json
+#name: MkDevs Web Angular SPA CI/CD
+#
+#on:
+#  push:
+#    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    permissions:
+#      contents: write  # allows the action to push to the repository
+#
+#    steps:
+#    - name: Checkout repository
+#      uses: actions/checkout@v4
+#
+#    - name: Use Node.js 20.x
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '20'
+#        cache: 'npm'
+#
+#    - name: Install dependencies
+#      run: npm ci
+#
+#    - name: Build the Angular app
+#      run: npm run build -- --configuration production --base-href "/"
+#
+#    - name: Deploy to GitHub Pages
+#      uses: peaceiris/actions-gh-pages@v3
+#      with:
+#        github_token: ${{ secrets.GITHUB_TOKEN }}
+#        publish_dir: ./dist/browser/  # this matches output path in angular.json
