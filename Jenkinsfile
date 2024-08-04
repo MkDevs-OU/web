@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NETLIFY_TOKEN = credentials('NETLIFY_TOKEN')
+        NETLIFY_BUILD_HOOK_URL = credentials('NETLIFY_BUILD_HOOK_URL')
     }
 
     stages {
@@ -14,35 +14,27 @@ pipeline {
 
         stage('Set Up Python Environment') {
             steps {
-                sh 'python -m venv venv'
-                sh '. venv/bin/activate'
-                sh 'pip install -r requirements.txt'
+                sh 'python3 -m venv venv' // create a virtual env
+                sh '. venv/bin/activate' // activate the virtual env
+                sh 'pip install --upgrade pip' // upgrade pip
+                sh 'pip install -r requirements.txt' // install dependencies (including Playwright)
+                sh 'playwright install' // install Playwright browsers
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                sh '. venv/bin/activate'
-                sh 'pytest tests'
+                sh '. venv/bin/activate' // activate the virtual env
+                sh 'pytest tests/' // run your Playwright tests
             }
         }
 
-        stage('Install Netlify CLI') {
-            steps {
-                sh 'npm install -g netlify-cli'
-            }
-        }
-
-        stage('Deploy to Netlify') {
+        stage('Trigger Netlify Deploy') {
             when {
-                expression { currentBuild.result == 'SUCCESS' }
+                expression { currentBuild.result == 'SUCCESS' } // only deploy if tests pass
             }
             steps {
-                script {
-                    withCredentials([string(credentialsId: 'NETLIFY_TOKEN', variable: 'NETLIFY_TOKEN')]) {
-                        sh 'netlify deploy --prod --dir=dist'
-                    }
-                }
+                sh 'curl -X POST $NETLIFY_BUILD_HOOK_URL' // trigger Netlify deploy
             }
         }
     }
