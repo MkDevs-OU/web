@@ -4,7 +4,7 @@ pipeline {
     environment {
         VENV_DIR = 'venv' // Define the virtual environment directory
         LOCAL_BIN = '/var/lib/jenkins/.local/bin'
-        NETLIFY_BUILD_HOOK_URL = credentials('netlify-build-hook-url') // Use Jenkins credentials for security
+        NETLIFY_BUILD_HOOK_URL = credentials('NETLIFY_BUILD_HOOK_URL') // Use Jenkins credentials for security
     }
 
     stages {
