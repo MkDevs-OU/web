@@ -2,46 +2,84 @@ pipeline {
     agent any
 
     environment {
-        NETLIFY_BUILD_HOOK_URL = credentials('NETLIFY_BUILD_HOOK_URL')
+        VENV_DIR = 'venv' // Define the virtual environment directory
+        LOCAL_BIN = '/var/lib/jenkins/.local/bin'
+        NETLIFY_BUILD_HOOK_URL = credentials('netlify-build-hook-url') // Use Jenkins credentials for security
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Checkout SCM') {
             steps {
-                git 'https://github.com/MkDevs-OU/web.git'
+                checkout scm
             }
         }
 
         stage('Set Up Python Environment') {
             steps {
-                sh 'python3 -m venv venv' // create a virtual env
-                sh '. venv/bin/activate' // activate the virtual env
-                sh 'pip install --upgrade pip' // upgrade pip
-                sh 'pip install -r requirements.txt' // install dependencies (including Playwright)
-                sh 'playwright install' // install Playwright browsers
+                script {
+                    // Create and activate Python virtual environment
+                    sh "python3 -m venv ${env.VENV_DIR}"
+                    sh '''
+                    . ${env.VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Install Playwright') {
+            steps {
+                script {
+                    // Ensure the local bin directory is in PATH
+                    sh '''
+                    . ${env.VENV_DIR}/bin/activate
+                    export PATH="${env.LOCAL_BIN}:${PATH}"
+                    playwright install
+                    '''
+                }
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                sh '. venv/bin/activate' // activate the virtual env
-                sh 'pytest tests/' // run your Playwright tests
+                script {
+                    // Run Playwright tests
+                    sh '''
+                    . ${env.VENV_DIR}/bin/activate
+                    export PATH="${env.LOCAL_BIN}:${PATH}"
+                    playwright test
+                    '''
+                }
             }
         }
 
         stage('Trigger Netlify Deploy') {
             when {
-                expression { currentBuild.result == 'SUCCESS' } // only deploy if tests pass
+                expression { currentBuild.result == 'SUCCESS' } // Only deploy if tests pass
             }
             steps {
-                sh 'curl -X POST $NETLIFY_BUILD_HOOK_URL' // trigger Netlify deploy
+                sh 'curl -X POST $NETLIFY_BUILD_HOOK_URL' // Trigger Netlify deploy
+            }
+        }
+
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
             }
         }
     }
 
     post {
+        failure {
+            echo 'Build failed. Please check the logs for details.'
+        }
+        success {
+            echo 'Build succeeded!'
+        }
         always {
-            cleanWs() // clean workspace after build
+            echo 'Cleaning up...'
+            cleanWs()
         }
     }
 }
