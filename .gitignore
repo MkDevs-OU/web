@@ -40,3 +40,58 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Python
+# Virtual environment
+venv/
+# Pytest cache
+.pytest_cache/
+# Playwright
+playwright-report/
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+# IDE specific
+.pyre/
+# Jupyter Notebook
+.ipynb_checkpoints
+# Python egg
+*.egg-info/
+.eggs/
+# Python build
+build/
+develop-eggs/
+dist/
+downloads/
+pip-wheel-metadata/
+share/python-wheels/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+# Unit test / coverage reports
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Configuration files
+# Jupyter Notebook
+*.ipynb_checkpoints
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+# Pyre
+.pyre/
+# pyenv
+.python-version
+# pipenv
+Pipfile.lock
+# poetry
+poetry.lock
+# pyright
+pyrightconfig.json
