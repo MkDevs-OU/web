@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        VENV_DIR = 'venv' // Define the virtual environment directory
-        LOCAL_BIN = '/var/lib/jenkins/.local/bin'
-        NETLIFY_BUILD_HOOK_URL = credentials('NETLIFY_BUILD_HOOK_URL') // Use Jenkins credentials for security
+        NETLIFY_BUILD_HOOK_URL = credentials('NETLIFY_BUILD_HOOK_URL') // Jenkins credentials for Netlify build hook
+        DOCKER_IMAGE = 'mcr.microsoft.com/playwright/python:v1.45.1-jammy' // Docker image for Playwright
+        SECURE_PROFILE = 'seccomp_profile.json' // path to seccomp profile
     }
 
     stages {
@@ -14,52 +14,23 @@ pipeline {
             }
         }
 
-        stage('Set Up Python Environment') {
-            steps {
-                script {
-                    // Create and activate Python virtual environment
-                    sh "python3 -m venv ${env.VENV_DIR}"
-                    sh '''
-                    . ${env.VENV_DIR}/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    '''
-                }
-            }
-        }
-
-        stage('Install Playwright') {
-            steps {
-                script {
-                    // Ensure the local bin directory is in PATH
-                    sh '''
-                    . ${env.VENV_DIR}/bin/activate
-                    export PATH="${env.LOCAL_BIN}:${PATH}"
-                    playwright install
-                    '''
-                }
-            }
-        }
-
         stage('Run Playwright Tests') {
             steps {
                 script {
-                    // Run Playwright tests
-                    sh '''
-                    . ${env.VENV_DIR}/bin/activate
-                    export PATH="${env.LOCAL_BIN}:${PATH}"
-                    playwright test
-                    '''
+                    // Run tests inside Docker container
+                    docker.image(env.DOCKER_IMAGE).inside("--ipc=host --user pwuser --security-opt seccomp=${env.SECURE_PROFILE}") {
+                        sh 'pytest --maxfail=1 --disable-warnings -v'
+                    }
                 }
             }
         }
 
         stage('Trigger Netlify Deploy') {
             when {
-                expression { currentBuild.result == 'SUCCESS' } // Only deploy if tests pass
+                expression { currentBuild.result == 'SUCCESS' } // only deploy if tests pass
             }
             steps {
-                sh 'curl -X POST $NETLIFY_BUILD_HOOK_URL' // Trigger Netlify deploy
+                sh 'curl -X POST $NETLIFY_BUILD_HOOK_URL' // trigger Netlify deploy
             }
         }
 
